@@ -25,6 +25,11 @@ vid = cv2.VideoCapture(path)
 NumOfFrame = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
 print(NumOfFrame)
 ########################################
+##################################
+# Output video repare
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+output_video = cv2.VideoWriter('Output.avi', fourcc,5.0,(256,128))
+####################################
 '''
 Use Opencv to cover the imageio
 the main target:
@@ -43,7 +48,7 @@ for num in range(NumOfFrame):
             center = None
             for c in cnts:
                 x,y,w,h = cv2.boundingRect(c)
-                cv2.rectangle(img, (x,y),(x+w,y+h),(0,255,0),2)
+                #cv2.rectangle(img, (x,y),(x+w,y+h),(0,255,0),2)
 
                 rect = cv2.minAreaRect(c)
                 box = cv2.boxPoints(rect)
@@ -59,12 +64,17 @@ for num in range(NumOfFrame):
                     center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
                 else:
                     center = (0,0)
-
-                cv2.circle(img, (int(x),int(y)),int(radius),(0,255,255),2)
-                cv2.circle(img, center,5,(0,0,255),-1)
-                pts.append(center)
+                CX = center[0]
+                CY = center[1]
+                center_string = "CX:{}, CY:{}".format(CX,CY)
+                cv2.putText(img,center_string,(0,128),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,0),1)
+                #cv2.circle(img, (int(x),int(y)),int(radius),(0,255,255),2)
+                cv2.circle(img, center,5,(255,0,0),-1) # Red color
+            pts.append(center)
+            output_video.write(img)
     except :
         print('Error or something happend')
+output_video.release()
 # write the figure into video and turn
 '''                
         fourcc = cv2.VideoWriter_fourcc('F','M','P','4')
