@@ -20,7 +20,8 @@ counter = 0
 directio = ""
 #######################################
 # read the video file
-path = "A4.avi"
+#path = "A4.avi"
+path = r"H:\Castro\100_single.avi"
 vid = cv2.VideoCapture(path)
 NumOfFrame = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
 print(NumOfFrame)
@@ -28,7 +29,7 @@ print(NumOfFrame)
 ##################################
 # Output video repare
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-output_video = cv2.VideoWriter('Output.avi', fourcc,5.0,(256,128))
+output_video = cv2.VideoWriter('Output_100.avi', fourcc,5.0,(256,128))
 ####################################
 '''
 Use Opencv to cover the imageio
@@ -56,7 +57,7 @@ for num in range(NumOfFrame):
                 box = np.int0(box)
                 cv2.drawContours(img, [box],0, (0,0,255))
             if len(cnts)>1:
-                c = sorted(cnts, key= cv2.contourArea)[-2]
+                c = sorted(cnts, key= cv2.contourArea)[-1] # The largest area
                 ((x,y),radius) = cv2.minEnclosingCircle(c)
                 M = cv2.moments(c)
             #deal with division by zero
